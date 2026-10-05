@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Unit tests for the docs checker
+        run: python -m unittest discover tests -v
+      - name: Check Markdown links (placeholders are reported, not failed)
+        run: python tools/check_docs.py
+      - name: Lint dns-precheck.sh
+        run: shellcheck tools/dns-precheck.sh
+      - name: Install dig
+        run: sudo apt-get update -q && sudo apt-get install -y -q dnsutils
+      - name: Smoke run of dns-precheck.sh
+        run: ./tools/dns-precheck.sh example.com
