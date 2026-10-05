@@ -1,0 +1,8 @@
+.DS_Store
+.env
+*.pdf
+drafts/
+__pycache__/
+*.pyc
+# DNS snapshots can contain client domain details
+dns-snapshot-*.txt
