@@ -23,7 +23,7 @@
 | "Your password has expired" | Follow the prompt to set a new one. |
 | "You don't have access to this app" | Your account works, but you have not been given access. Contact IT or your manager (see below). |
 | The code from your phone app does not work | Check that your phone's time is set automatically (Step 4). |
-| No code arrives by text | Wait 2 minutes, check signal, then use **Try another way** or a backup code if you have one. |
+| No code arrives by text | Wait 2 minutes, check signal, then use **Try another way** or **Sign in another way** (the wording depends on the app), or a backup code if you have one. |
 
 ## Step 3: Reset Your Password
 

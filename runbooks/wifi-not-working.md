@@ -10,8 +10,8 @@
 
 Check a phone or a coworker's laptop on the same Wi-Fi.
 
-- **Their internet works too:** the problem is your computer. Go to Step 2.
-- **Nobody's internet works:** the problem is the network. Skip to [When to contact IT](#when-to-contact-it) and say "Wi-Fi is down for everyone in [room or area]."
+- **Their internet works but yours does not:** the problem is your computer. Go to Step 2.
+- **Nobody's internet works:** the problem is the network. Skip to [When to Contact IT](#when-to-contact-it) and say "Wi-Fi is down for everyone in [room or area]."
 
 ## Step 2: Turn Wi-Fi Off and On
 

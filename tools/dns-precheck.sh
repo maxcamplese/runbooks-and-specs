@@ -3,7 +3,7 @@
 # dns-precheck.sh: Snapshot a domain's DNS, email, and HTTPS setup before
 # you change anything, and flag common problems in plain language.
 #
-# This automates the "Before the change" and "After the change" sections of
+# This automates the "Before the Change" and "After the Change" sections of
 # checklists/dns-and-hosting-checklist.md. Run it before a change and save the
 # output as your rollback record, then run it again afterward and compare.
 #
@@ -119,10 +119,14 @@ report() {
   fi
 
   section "Redirects"
+  local loads=0
   for url in "https://$domain" "https://www.$domain"; do
     result="$(curl -s -o /dev/null -m 8 -w '%{http_code} %{redirect_url}' "$url")"
     echo "  $url -> ${result:-no response}"
+    case "$result" in 2*) loads=$((loads + 1)) ;; esac
   done
+  # Search engines treat example.com and www.example.com as two sites unless one redirects.
+  [ "$loads" -eq 2 ] && warn "Both https://$domain and https://www.$domain load without redirecting. Redirect one to the other."
 
   section "TTL note"
   echo "  Lower the TTL on records you will change (for example to 300) at least a day ahead,"

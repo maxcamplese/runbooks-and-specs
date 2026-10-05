@@ -11,7 +11,7 @@ A required Region field on Salesforce Accounts, with Slack alerts for new accoun
 | **Requested by** | VP of Sales (fictional) |
 | **Systems** | Salesforce (Sales Cloud), Slack |
 | **Target release** | Not scheduled (sample spec). Would ship during a weekly change window. |
-| **Change type** | Standard change: configuration only, no code |
+| **Change type** | Normal change: configuration only, no code |
 
 ---
 
@@ -85,6 +85,7 @@ Sales managers cannot tell which region a new account belongs to without opening
 
 - **Type:** record-triggered flow on Account, runs **after save**, **only when a record is created**.
 - **Logic:** a Get Records element looks up the Slack channel for the Account's Region in the custom metadata type `Region_Slack_Channel__mdt`. The flow then posts the Account name, owner, and a link to the record to that channel.
+- **Asynchronous path:** the Slack post runs on the flow's **Run Asynchronously** path, because a call out to Slack can't run inside the save itself. A Slack failure therefore cannot roll back the save.
 - **Why custom metadata:** an admin can change a channel without editing or redeploying the flow.
 - **Channel mapping** (the records in `Region_Slack_Channel__mdt`):
 
@@ -111,7 +112,7 @@ Add Region to the Account page layout in the top section, and to the "New Accoun
 
 ### 5.6 Report and Dashboard
 
-- **Report:** "New Accounts by Region". Report type Accounts, filter `Created Date = THIS QUARTER or LAST QUARTER`, grouped by Region and Created Date (by month).
+- **Report:** "New Accounts by Region". Report type Accounts, filter Created Date, Range **Current and Previous CQ**, grouped by Region and Created Date (by month).
 - **Dashboard component:** stacked bar chart on the existing Sales Leadership dashboard.
 
 ## 6. Data Migration (Backfill)
@@ -120,7 +121,7 @@ Add Region to the Account page layout in the top section, and to the "New Accoun
 2. Map each Account to a Region by billing state and country, using a mapping table Sales Ops approves before the load.
 3. Sales Ops reviews any rows that did not map (expected: under 5 percent).
 4. Load the `Region__c` values with Data Loader in the full sandbox first, then in production.
-5. **Verify:** a report of Accounts where Region is blank returns 0 rows, except records owned by the integration user.
+5. **Verify:** a report of Accounts where Region is blank returns 0 rows, except records created by the integration user.
 
 The backfill runs **before** the validation rule is turned on, so existing records that are edited do not error out.
 
@@ -157,7 +158,7 @@ The backfill runs **before** the validation rule is turned on, so existing recor
 | 7 | R1 | Restricted values | Try to set Region to "Northwest" through Data Loader. | Rejected: value not in the restricted picklist. | |
 | 8 | R4 | Slack failure | Temporarily point West to a channel the integration cannot post to. Create a West Account. | Account still saves. Admin group gets the fault email. | |
 | 9 | R6 | Report | Open "New Accounts by Region". | Accounts from tests 2 to 6 appear under the right regions. | |
-| 10 | Backfill | Blank check | Run the "Region is blank" report after the sandbox backfill. | 0 rows except integration-owned records. | |
+| 10 | Backfill | Blank check | Run the "Region is blank" report after the sandbox backfill. | 0 rows except records created by the integration user. | |
 | 11 | R2, R5 | Rep fills in a blank Region | As a Sales Rep, open the Account from test 6 (no Region), set Region = East, save. | Saves. No Slack message (not a new record). | |
 
 Testers record defects with the test number, the steps, a screenshot, and the user they tested as.

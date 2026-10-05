@@ -14,7 +14,7 @@ Use this before, during, and after pointing a client's domain at a new website. 
   dig NS example.com +short
   ```
 - [ ] **Export or screenshot every existing DNS record** before changing anything. This is the rollback plan.
-- [ ] **Identify email records and do not touch them:** `MX`, and the `TXT` records for SPF (`v=spf1 ...`), DKIM, and DMARC (`_dmarc`). Breaking these stops the client's email, which is worse than a website outage.
+- [ ] **Identify email records and do not touch them:** `MX`, the SPF and DMARC `TXT` records (`v=spf1 ...` and `_dmarc`), and DKIM (`TXT` or `CNAME`, for example `selector1._domainkey`). Breaking these stops the client's email, which is worse than a website outage.
   ```bash
   dig MX example.com +short
   dig TXT example.com +short
@@ -37,7 +37,7 @@ There are two ways to point a domain at a cPanel host like Reclaim. Pick one.
 
 **Option B: move all DNS to the host by changing nameservers.** Simpler to manage afterward, but every record moves with it.
 
-- [ ] **Recreate every non-website record in cPanel's Zone Editor first,** especially `MX` and the SPF, DKIM, and DMARC `TXT` records from your export.
+- [ ] **Recreate every non-website record in cPanel's Zone Editor first,** especially `MX`, the SPF and DMARC `TXT` records, and the DKIM `TXT` or `CNAME` records from your export.
 - [ ] **If email is hosted elsewhere** (for example Google Workspace or Microsoft 365), set cPanel's **Email Routing** to **Remote Mail Exchanger**. Otherwise the server may try to deliver the domain's mail locally.
 - [ ] **Change the nameservers at the registrar** to the ones the host lists for your account.
 - [ ] **Expect a longer wait.** Nameserver changes can take up to 24 to 48 hours to spread, and lowering a record's TTL does not speed them up.
@@ -63,6 +63,6 @@ There are two ways to point a domain at a cPanel host like Reclaim. Pick one.
 | Site shows the old website | Old record still cached, or old `A` record not removed | `dig A example.com +short` from two resolvers; wait out the old TTL |
 | "Server not found" | Record missing, or typo in the name or target | Compare against the host's instructions character by character |
 | Certificate warning | Certificate not issued yet, or `www` not covered | cPanel **SSL/TLS Status**; run AutoSSL, then re-check |
-| Email stopped arriving | `MX` or SPF record changed or deleted, or cPanel Email Routing set to local | Compare with the export from "Before the change" and restore; check Email Routing |
+| Email stopped arriving | `MX` or SPF record changed or deleted, or cPanel Email Routing set to local | Compare with the export from "Before the Change" and restore; check Email Routing |
 
 **Rollback:** restore the exported records. For Option A with the TTL lowered to 300 seconds, most visitors see the old site again within about 5 minutes. For Option B, change the nameservers back; that can take as long as the original change.

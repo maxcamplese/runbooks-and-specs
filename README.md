@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/maxcamplese/runbooks-and-specs/actions/workflows/ci.yml/badge.svg)](https://github.com/maxcamplese/runbooks-and-specs/actions/workflows/ci.yml)
 
-Plain-language IT runbooks for non-technical users, a sample technical spec with a RACI matrix and UAT test plan, and a DNS and hosting checklist, plus two small tools that make the docs runnable.
+Plain-language IT runbooks for non-technical users, a sample technical spec with a RACI matrix and UAT test plan, and a DNS and hosting checklist, plus a DNS pre-check tool that automates the checklist and a docs checker that runs in CI.
 
 | Document | Audience | What it shows |
 |---|---|---|
