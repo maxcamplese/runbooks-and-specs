@@ -1,0 +1,38 @@
+DNS pre-check for example.com (2026-10-05 13:31 CDT)
+Columns: name  TTL (seconds)  type  value
+
+Nameservers (who hosts the DNS; this may not be the registrar)
+  example.com.  86326  NS  elliott.ns.cloudflare.com.
+  example.com.  86326  NS  hera.ns.cloudflare.com.
+
+Website: root domain
+  example.com.  69  A  104.20.23.154
+  example.com.  69  A  172.66.147.243
+
+Website: www
+  www.example.com.  226  A  172.66.147.243
+  www.example.com.  226  A  104.20.23.154
+
+Email: MX (where mail is delivered)
+  example.com.  226  MX  0 .
+  Note: this is a null MX. The domain deliberately accepts no email.
+
+Email: SPF (which servers may send mail as this domain)
+  example.com.  226  TXT  "v=spf1 -all"
+
+Email: DMARC (policy for mail that fails checks)
+  _dmarc.example.com.  226  TXT  "v=DMARC1;p=reject;sp=reject;adkim=s;aspf=s"
+
+HTTPS certificate
+  Expires: Dec 25 22:56:35 2026 GMT (81 days)
+
+Redirects
+  https://example.com -> 200 
+  https://www.example.com -> 200 
+
+TTL note
+  Lower the TTL on records you will change (for example to 300) at least a day ahead,
+  so the change spreads quickly and a rollback is fast.
+
+Findings
+  No problems found.
